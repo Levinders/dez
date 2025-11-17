@@ -122,6 +122,104 @@ p {
 }
 
 /* ==========================================================================
+   DASHBOARD METRICS
+   ========================================================================== */
+
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.metric-card {
+  background: var(--bg-panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  padding: 20px 22px;
+  border: 1px solid rgba(148,163,184,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(15,23,42,0.1);
+}
+
+.metric-card h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.metric-value {
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+
+/* ==========================================================================
+   RECENT ACTIVITY LIST
+   ========================================================================== */
+
+.dashboard-section {
+  margin-top: 34px;
+}
+
+.section-title {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.activity-list {
+  background: var(--bg-panel);
+  border-radius: var(--radius);
+  padding: 18px;
+  border: 1px solid rgba(148,163,184,0.18);
+  box-shadow: var(--shadow-soft);
+}
+
+.activity-item {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-item strong {
+  color: var(--text-main);
+}
+
+.activity-item span {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+
+/* ==========================================================================
+   DASHBOARD RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .metrics-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .metrics-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ==========================================================================
    WIZARD LAYOUT
    ========================================================================== */
 .wizard-shell {
