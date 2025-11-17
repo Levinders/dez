@@ -1,33 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Super Admin Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard • Super Admin</title>
 
-    <link rel="stylesheet" href="../assets/css/base.css" />
-    <link rel="stylesheet" href="../assets/css/sidebar.css" />
-
-    <script src="../config.js"></script>
-    <script src="../assets/js/api.js" defer></script>
-    <script src="../assets/js/sidebar.js" defer></script>
+  <link rel="stylesheet" href="../assets/css/admin.css" />
+  <script src="../config.js"></script>
+  <script src="../assets/js/admin.js" defer></script>
 </head>
 
-<body>
+<body data-page="dashboard">
 
-    <div id="content">
+  <div id="content">
+    <header class="page-header">
+      <div>
         <h1>Super Admin Dashboard</h1>
-        <p>Welcome to your LMS control panel.</p>
+        <p>Overview of all coaches, domains, and system activity.</p>
+      </div>
+    </header>
 
-        <div id="output">Loading...</div>
-    </div>
+    <!-- DASHBOARD WRAPPER -->
+    <section id="dashboard-wrapper">
 
-    <script>
-        // Load sidebar with active page indicator
-        loadSidebar("dashboard");
+      <!-- METRICS ROW -->
+      <div class="metrics-row">
+        <div class="metric-card" id="metric-total-coaches">
+          <h3>Total Coaches</h3>
+          <span class="metric-value">—</span>
+        </div>
 
-        document.getElementById("output").innerText = "UI Loaded Successfully";
-    </script>
+        <div class="metric-card" id="metric-active-coaches">
+          <h3>Active Coaches</h3>
+          <span class="metric-value">—</span>
+        </div>
+
+        <div class="metric-card" id="metric-total-domains">
+          <h3>Domains Linked</h3>
+          <span class="metric-value">—</span>
+        </div>
+
+        <div class="metric-card" id="metric-suspended-coaches">
+          <h3>Suspended</h3>
+          <span class="metric-value">—</span>
+        </div>
+      </div>
+
+      <!-- SECOND ROW: RECENT ACTIVITY -->
+      <div class="dashboard-section">
+        <h2 class="section-title">Recent Activity</h2>
+        <div id="recent-activity" class="activity-list">
+          <!-- Filled dynamically -->
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- SIDEBAR -->
+  <script>
+    loadSidebar("dashboard");
+  </script>
 
 </body>
 </html>
