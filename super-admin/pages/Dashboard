@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coach Dashboard</title>
+
+  <link rel="stylesheet" href="../assets/css/coach-admin.css" />
+  <script src="../config.js"></script>
+  <script src="../assets/js/coach-admin.js" defer></script>
+</head>
+
+<body data-page="coach-dashboard">
+
+  <!-- Toast container will be created by JS -->
+
+  <!-- Top bar -->
+  <header id="coach-topbar">
+    <div class="coach-brand">
+      <div class="coach-logo" id="coachLogo">🎓</div>
+      <div class="coach-brand-text">
+        <div class="coach-brand-name" id="coachBrandName">Coach Portal</div>
+        <div class="coach-brand-sub" id="coachBrandSub">Admin Area</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main id="coach-content">
+    <section class="coach-page-header">
+      <div>
+        <h1 id="coachPageTitle">Dashboard</h1>
+        <p id="coachPageSubtitle">Overview of your students and programs.</p>
+      </div>
+    </section>
+
+    <!-- Summary metrics -->
+    <section class="coach-metrics-row">
+      <div class="coach-metric-card" id="metric-total-students">
+        <h3 id="label-total-students">Total Students</h3>
+        <span class="metric-value">—</span>
+      </div>
+
+      <div class="coach-metric-card" id="metric-active-students">
+        <h3 id="label-active-students">Active</h3>
+        <span class="metric-value">—</span>
+      </div>
+
+      <div class="coach-metric-card" id="metric-total-courses">
+        <h3>Total Courses</h3>
+        <span class="metric-value">—</span>
+      </div>
+
+      <div class="coach-metric-card" id="metric-completion-rate">
+        <h3>Avg Completion</h3>
+        <span class="metric-value">—%</span>
+      </div>
+    </section>
+
+    <!-- Quick actions -->
+    <section class="coach-quick-actions">
+      <button class="coach-btn" onclick="coachOpenAddStudent()">
+        ➕ New <span id="label-student-singular-btn">Student</span>
+      </button>
+
+      <button class="coach-btn ghost" onclick="coachGoToStudents()">
+        🧑‍🎓 View <span id="label-student-plural-btn">Students</span>
+      </button>
+
+      <button class="coach-btn ghost" onclick="coachGoToCourses()">
+        📚 View Courses
+      </button>
+    </section>
+
+    <!-- Recent activity -->
+    <section class="coach-activity-section">
+      <div class="coach-activity-header">
+        <h2>Recent Activity</h2>
+        <small id="activity-subtitle">Latest signups and updates.</small>
+      </div>
+      <div id="coach-activity-feed" class="coach-activity-feed">
+        <!-- filled by JS -->
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>
