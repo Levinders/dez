@@ -1,11 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coach Dashboard</title>
+
+  <link rel="stylesheet" href="/shared/css/sidebar.css" />
+  <link rel="stylesheet" href="/coach/assets/css/coach.css" />
+
+  <script src="/config.js"></script>
+  <script src="/shared/js/auth.js"></script>
+  <script src="/shared/js/api.js"></script>
+  <script src="/shared/js/sidebar.js" defer></script> <!-- will create next -->
+</head>
+
 <body data-role="coach" data-page="dashboard">
-  <div id="sidebar"></div>
-  <div id="page-content">
-    <!-- coach dashboard content -->
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-rail app-scroll" id="sidebar-rail">
+        <div class="sidebar-header">
+          <div class="sidebar-logo" id="sidebar-logo">
+            <!-- JS will inject brand initials or logo SVG here -->
+          </div>
+        </div>
+
+        <nav class="sidebar-nav" id="sidebar-nav">
+          <!-- JS (sidebar.js) will inject nav items with SVG icons here -->
+        </nav>
+
+        <div class="sidebar-footer" id="sidebar-footer">
+          <!-- JS will inject logout/settings icon buttons here -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- Overlay for mobile -->
+    <div class="app-overlay" id="app-overlay"></div>
+
+    <!-- Main content -->
+    <main class="app-main">
+      <header class="app-topbar">
+        <button class="mobile-menu-button" id="mobile-menu-button" type="button">
+          <!-- SVG hamburger icon will be injected by JS -->
+        </button>
+        <div></div>
+      </header>
+
+      <!-- Page content goes here -->
+      <h1>Coach Dashboard</h1>
+    </main>
   </div>
 
-  <script src="/shared/js/auth.js"></script>
   <script>
     enforceAuthForBodyRole();
   </script>
 </body>
+</html>
