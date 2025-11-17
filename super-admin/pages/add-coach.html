@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Coach</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add New Coach • Super Admin</title>
 
-    <link rel="stylesheet" href="../assets/css/admin.css" />
-
-    <script src="../assets/js/admin.js" defer></script>
-    
+  <link rel="stylesheet" href="../assets/css/admin.css" />
+  <script src="../config.js"></script>
+  <script src="../assets/js/admin.js" defer></script>
 </head>
 
 <body data-page="add-coach">
+  <div id="content">
+    <header class="page-header">
+      <div>
+        <h1>Add New Coach</h1>
+        <p>Onboard a new coaching business and wire it into routing in a few guided steps.</p>
+      </div>
+    </header>
 
-<div id="content">
-    <h1>Add New Coach</h1>
-    <p>Fill in the details to create a new coach environment.</p>
+    <!-- Wizard Shell -->
+    <section class="wizard-shell">
+      <!-- Progress / stepper area -->
+      <div id="wizard-progress"></div>
 
-    <div id="wizard"></div>
-</div>
-
-<script>
-    loadSidebar("add-coach");
-</script>
-
+      <!-- Actual step content -->
+      <div id="wizard"></div>
+    </section>
+  </div>
 </body>
 </html>
