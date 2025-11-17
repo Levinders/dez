@@ -1,0 +1,419 @@
+/* ==========================================================================
+   GLOBAL APP SHELL + SIDEBAR (Linear / Vercel style)
+   Shared by: /superadmin, /coach, /student
+   ========================================================================== */
+
+:root {
+  --app-bg: #0b1120;             /* overall background behind content */
+  --app-surface: #020617;        /* sidebar background */
+  --app-surface-raised: #020617; /* can be same, but here for future */
+  --app-border-subtle: #1f2937;
+  --app-border-strong: #374151;
+
+  --app-text-main: #e5e7eb;
+  --app-text-muted: #9ca3af;
+  --app-text-invert: #0b1120;
+
+  --app-accent: #f9fafb;         /* subtle, almost white */
+  --app-accent-muted: #4b5563;
+
+  --sidebar-collapsed: 72px;
+  --sidebar-expanded: 240px;
+
+  --sidebar-transition: 0.22s ease;
+  --sidebar-radius: 16px;
+
+  --nav-icon-size: 20px;
+  --nav-item-height: 40px;
+}
+
+/* ==========================================================================
+   BASE LAYOUT
+   ========================================================================== */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--app-bg);
+}
+
+/* App shell wrapper — use on every dashboard page */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #111827 0, #020617 52%, #000000 100%);
+}
+
+/* Main content area */
+.app-main {
+  flex: 1;
+  min-height: 100vh;
+  color: var(--app-text-main);
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(circle at top, #020617 0, #020617 52%, #020617 100%);
+  padding: 20px 24px;
+}
+
+/* Optional top bar inside app-main if needed later */
+.app-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+/* ==========================================================================
+   SIDEBAR CONTAINER
+   ========================================================================== */
+
+.app-sidebar {
+  position: relative;
+  z-index: 40;
+  width: var(--sidebar-expanded);
+  max-width: var(--sidebar-expanded);
+  background: linear-gradient(to bottom, #020617, #030712);
+  border-right: 1px solid var(--app-border-subtle);
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Collapsed state (desktop) — JS will toggle .is-collapsed on body */
+body.is-collapsed .app-sidebar {
+  width: var(--sidebar-collapsed);
+  max-width: var(--sidebar-collapsed);
+  padding-inline: 10px;
+}
+
+/* The actual sidebar "rail" content */
+.sidebar-rail {
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: radial-gradient(circle at top, #020617 0, #020617 65%, #020617 100%);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: calc(100vh - 24px);
+}
+
+/* ==========================================================================
+   SIDEBAR HEADER (LOGO-ONLY)
+   ========================================================================== */
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  margin-bottom: 6px;
+}
+
+/* Circular logo container (minimal, no text) */
+.sidebar-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--app-border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, #111827 0, #020617 80%);
+  color: var(--app-text-main);
+  font-size: 14px;
+}
+
+/* In expanded mode we keep it centered but still icon-only. 
+   If in future you want text, you can conditionally show within here. */
+body.is-collapsed .sidebar-logo {
+  margin-inline: auto;
+}
+
+/* ==========================================================================
+   NAVIGATION
+   ========================================================================== */
+
+.sidebar-nav {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+/* Section title (small text, optional above groups) */
+.sidebar-section-label {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--app-text-muted);
+  padding: 6px 10px;
+  opacity: 0.75;
+}
+
+/* Hide labels entirely when collapsed */
+body.is-collapsed .sidebar-section-label {
+  display: none;
+}
+
+/* Single nav item button */
+.nav-item {
+  position: relative;
+  border-radius: 999px;
+  height: var(--nav-item-height);
+  padding-inline: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--app-text-muted);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  transition:
+    background var(--sidebar-transition),
+    color var(--sidebar-transition),
+    transform var(--sidebar-transition);
+}
+
+/* Active left rail indicator */
+.nav-item::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  width: 3px;
+  height: 18px;
+  border-radius: 999px;
+  background: transparent;
+  opacity: 0;
+  transform: scaleY(0.4);
+  transition:
+    opacity var(--sidebar-transition),
+    transform var(--sidebar-transition),
+    background var(--sidebar-transition);
+}
+
+/* Icon container */
+.nav-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--app-text-muted);
+  transition:
+    background var(--sidebar-transition),
+    color var(--sidebar-transition),
+    transform var(--sidebar-transition);
+}
+
+/* Actual SVG icon */
+.nav-icon svg {
+  width: var(--nav-icon-size);
+  height: var(--nav-icon-size);
+  stroke-width: 1.7;
+}
+
+/* Label text */
+.nav-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Collapse label text when collapsed */
+body.is-collapsed .nav-label {
+  display: none;
+}
+
+/* Hover state */
+.nav-item:hover {
+  background: rgba(15, 23, 42, 0.8);
+  color: var(--app-text-main);
+  transform: translateY(-1px);
+}
+
+.nav-item:hover .nav-icon {
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--app-text-main);
+}
+
+/* Active state */
+.nav-item.is-active {
+  color: var(--app-text-main);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.nav-item.is-active::before {
+  opacity: 1;
+  transform: scaleY(1);
+  background: linear-gradient(to bottom, #e5e7eb, #9ca3af);
+}
+
+.nav-item.is-active .nav-icon {
+  background: #e5e7eb;
+  color: #020617;
+}
+
+/* ==========================================================================
+   SIDEBAR FOOTER / ACCOUNT AREA
+   ========================================================================== */
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid rgba(31, 41, 55, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Mini icon-only avatar button (logout/settings) */
+.sidebar-icon-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--app-border-subtle);
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--app-text-muted);
+  cursor: pointer;
+  transition:
+    background var(--sidebar-transition),
+    border-color var(--sidebar-transition),
+    color var(--sidebar-transition),
+    transform var(--sidebar-transition);
+}
+
+.sidebar-icon-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sidebar-icon-button:hover {
+  background: rgba(15, 23, 42, 1);
+  border-color: var(--app-border-strong);
+  color: var(--app-text-main);
+  transform: translateY(-1px);
+}
+
+/* In expanded mode, footer may optionally show label text next to icons.
+   We'll hide that by default; JS can inject if needed. */
+.sidebar-footer-label {
+  display: none;
+}
+
+/* ==========================================================================
+   MOBILE BEHAVIOR
+   ========================================================================== */
+
+/* On mobile, sidebar becomes overlay drawer */
+@media (max-width: 768px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .app-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform var(--sidebar-transition);
+    width: var(--sidebar-expanded);
+    max-width: var(--sidebar-expanded);
+    padding: 12px 10px;
+  }
+
+  /* When open (body.sidebar-open set by JS) */
+  body.sidebar-open .app-sidebar {
+    transform: translateX(0);
+  }
+
+  .app-main {
+    padding: 16px 14px 24px;
+  }
+
+  /* Topbar hamburger for mobile (we'll place it in page-specific markup) */
+  .app-topbar {
+    margin-bottom: 12px;
+  }
+
+  .mobile-menu-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    border: 1px solid var(--app-border-subtle);
+    background: rgba(15, 23, 42, 0.95);
+    color: var(--app-text-main);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition:
+      background var(--sidebar-transition),
+      border-color var(--sidebar-transition),
+      transform var(--sidebar-transition);
+  }
+
+  .mobile-menu-button:hover {
+    background: rgba(15, 23, 42, 1);
+    border-color: var(--app-border-strong);
+    transform: translateY(-1px);
+  }
+
+  .mobile-menu-button svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Overlay behind sidebar on mobile */
+.app-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--sidebar-transition);
+  z-index: 30;
+}
+
+body.sidebar-open .app-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ==========================================================================
+   UTILITY CLASSES (OPTIONAL)
+   ========================================================================== */
+
+.app-scroll {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #4b5563 transparent;
+}
+
+.app-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.app-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.app-scroll::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 999px;
+}
