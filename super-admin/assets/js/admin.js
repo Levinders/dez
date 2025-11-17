@@ -421,6 +421,46 @@ async function submitCoach() {
 }
 
 /* ==========================================================================
+   DASHBOARD LOGIC
+   ========================================================================== */
+
+async function loadDashboard() {
+  // API example:
+  const stats = await api("dashboardStats");
+
+  // Update metric cards
+  document.querySelector("#metric-total-coaches .metric-value").innerText =
+    stats.total_coaches ?? "0";
+
+  document.querySelector("#metric-active-coaches .metric-value").innerText =
+    stats.active_coaches ?? "0";
+
+  document.querySelector("#metric-total-domains .metric-value").innerText =
+    stats.total_domains ?? "0";
+
+  document.querySelector("#metric-suspended-coaches .metric-value").innerText =
+    stats.suspended ?? "0";
+
+  // Activity feed
+  const feed = document.getElementById("recent-activity");
+  feed.innerHTML = "";
+
+  if (!stats.activity || stats.activity.length === 0) {
+    feed.innerHTML = `<div class="activity-item">No recent activity yet.</div>`;
+    return;
+  }
+
+  stats.activity.forEach(item => {
+    feed.innerHTML += `
+      <div class="activity-item">
+        <strong>${item.title}</strong>
+        <span>${item.time}</span>
+      </div>
+    `;
+  });
+}
+
+/* ==========================================================================
    PAGE INITIALIZATION
    ========================================================================== */
 
@@ -431,4 +471,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if (activePage === "add-coach") {
     initAddCoachWizard();
   }
+
+   if (activePage === "dashboard") {
+    loadDashboard();
+   }
+
 });
