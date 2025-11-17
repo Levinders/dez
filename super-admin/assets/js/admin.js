@@ -338,7 +338,7 @@ function renderStepScript() {
 
       <div class="form-group">
         <label>Web App URL</label>
-        <input id="script_url" placeholder="https://script.google.com/macros/s/XYZ/exec" value="${coachData.admin_script_url || ""}">
+        <input id="script_url" placeholder="https://script.google.com/macros/s/AKfycbwM4KYaYHfwPyN8XTG3Z1IDxkpLcjyCbJD-gHPMEtfCX_MIGq_KnovYH7im94djrKE1Bw/exec" value="${coachData.admin_script_url || ""}">
         <small>Deploy as a web app & set access appropriately. Use the <strong>/exec</strong> URL.</small>
       </div>
 
