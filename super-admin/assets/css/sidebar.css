@@ -1,1 +1,71 @@
+/* Sidebar container */
+#sidebar {
+    width: 240px;
+    height: 100vh;
+    background: #0f172a;
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Brand/logo */
+#sidebar .logo {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+/* Navigation links */
+#sidebar nav {
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 10px;
+    margin-bottom: 5px;
+    color: #cbd5e1;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: 0.2s ease;
+}
+
+#sidebar .nav-link span {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+#sidebar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+/* Active link */
+#sidebar .nav-link.active {
+    background: #1e293b;
+    color: white;
+}
+
+/* Main content wrapper */
+#content {
+    margin-left: 260px;
+    padding: 20px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    #sidebar {
+        width: 180px;
+    }
+    #content {
+        margin-left: 200px;
+    }
+}
 
