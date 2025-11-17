@@ -1,43 +1,46 @@
 /* ==========================================================================
-   GLOBAL HELPERS
+   GLOBAL TOAST + API
    ========================================================================== */
 
-function showToast(message, type="success") {
-    let box = document.getElementById("toast-container");
-    if (!box) {
-        box = document.createElement("div");
-        box.id = "toast-container";
-        document.body.appendChild(box);
-    }
+function showToast(message, type = "success") {
+  let box = document.getElementById("toast-container");
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "toast-container";
+    document.body.appendChild(box);
+  }
 
-    const t = document.createElement("div");
-    t.className = `toast ${type}`;
-    t.innerText = message;
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  box.appendChild(toast);
 
-    box.appendChild(t);
+  // animate in
+  requestAnimationFrame(() => {
+    toast.classList.add("show");
+  });
 
-    // animate in
-    setTimeout(() => t.classList.add("show"), 20);
-    // remove
-    setTimeout(() => {
-        t.classList.remove("show");
-        setTimeout(() => t.remove(), 300);
-    }, 3000);
+  // remove after 3s
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 250);
+  }, 3000);
 }
 
-async function api(action, data={}) {
-    const payload = { action, ...data };
+async function api(action, data = {}) {
+  const payload = { action, ...data };
 
-    try {
-        const res = await fetch(WORKER_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        });
-        return await res.json();
-    } catch (err) {
-        return { success: false, error: err.message };
-    }
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    return await res.json();
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
 }
 
 /* ==========================================================================
@@ -45,178 +48,376 @@ async function api(action, data={}) {
    ========================================================================== */
 
 async function loadSidebar(activePage) {
-    const html = await fetch("../templates/sidebar.html").then(r => r.text());
+  try {
+    const sidebarHtml = await fetch("../templates/sidebar.html").then((r) =>
+      r.text()
+    );
+
     const wrapper = document.createElement("div");
-    wrapper.innerHTML = html;
+    wrapper.innerHTML = sidebarHtml;
     document.body.prepend(wrapper);
 
-    // highlight active link
-    document.querySelectorAll(".nav-link").forEach(a => {
-        if (a.dataset.page === activePage) {
-            a.classList.add("active");
-        }
+    document.querySelectorAll(".nav-link").forEach((link) => {
+      if (link.dataset.page === activePage) {
+        link.classList.add("active");
+      }
     });
+  } catch (err) {
+    console.error("Failed to load sidebar:", err);
+  }
 }
 
 /* ==========================================================================
-   ADD COACH WIZARD LOGIC
+   ADD COACH WIZARD
    ========================================================================== */
 
-let wizardStep = 1;
-let coachData = {};
+const COACH_WIZARD_STEPS = [
+  { id: 1, key: "details", label: "Coach details" },
+  { id: 2, key: "domain", label: "Domain mapping" },
+  { id: 3, key: "sheet", label: "Google Sheet" },
+  { id: 4, key: "script", label: "Apps Script URL" },
+  { id: 5, key: "confirm", label: "Confirm & create" },
+];
 
-document.addEventListener("DOMContentLoaded", () => {
-    if (document.body.dataset.page === "add-coach") {
-        loadStep1();
-    }
-});
+let coachWizardStep = 1;
+let coachData = {
+  coach_name: "",
+  email: "",
+  plan: "Starter",
+  coach_id: "",
+  domain: "",
+  sheet_id: "",
+  admin_script_url: "",
+};
 
-function loadStep1() {
-    wizardStep = 1;
-    document.getElementById("wizard").innerHTML = `
-        <div class="wizard-step">
-            <h2>Coach Details</h2>
+function v(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : "";
+}
 
-            <div class="form-group">
-                <label>Coach Name</label>
-                <input type="text" id="coach_name">
-            </div>
+function initAddCoachWizard() {
+  coachWizardStep = 1;
+  coachData = {
+    coach_name: "",
+    email: "",
+    plan: "Starter",
+    coach_id: "",
+    domain: "",
+    sheet_id: "",
+    admin_script_url: "",
+  };
+  renderWizardProgress();
+  renderWizardStep();
+}
 
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="coach_email">
-            </div>
+function renderWizardProgress() {
+  const container = document.getElementById("wizard-progress");
+  if (!container) return;
 
-            <div class="form-group">
-                <label>Plan</label>
-                <select id="coach_plan">
-                    <option>Starter</option>
-                    <option>Pro</option>
-                    <option>Premium</option>
-                </select>
-            </div>
+  // Build step pills
+  let stepsHtml = '<div class="wizard-steps">';
+  COACH_WIZARD_STEPS.forEach((step) => {
+    let cls = "wizard-step-pill";
+    if (step.id < coachWizardStep) cls += " done";
+    if (step.id === coachWizardStep) cls += " active";
 
-            <button class="btn-primary" onclick="saveStep1()">Next</button>
-        </div>
+    stepsHtml += `
+      <div class="${cls}">
+        <div class="dot">${step.id < coachWizardStep ? "✓" : step.id}</div>
+        <span>${step.label}</span>
+      </div>
     `;
+  });
+  stepsHtml += "</div>";
+
+  // Progress bar
+  const progressPercent =
+    ((coachWizardStep - 1) / (COACH_WIZARD_STEPS.length - 1)) * 100;
+
+  const progressBar = `
+    <div class="wizard-progress-bar">
+      <div class="wizard-progress-bar-fill" style="width:${progressPercent}%;"></div>
+    </div>
+    <div class="wizard-current-label">
+      Step ${coachWizardStep} of ${COACH_WIZARD_STEPS.length} • ${
+    COACH_WIZARD_STEPS[coachWizardStep - 1].label
+  }
+    </div>
+  `;
+
+  container.innerHTML = stepsHtml + progressBar;
+}
+
+function renderWizardStep() {
+  const wrapper = document.getElementById("wizard");
+  if (!wrapper) return;
+
+  let html = "";
+
+  switch (coachWizardStep) {
+    case 1:
+      html = renderStepDetails();
+      break;
+    case 2:
+      html = renderStepDomain();
+      break;
+    case 3:
+      html = renderStepSheet();
+      break;
+    case 4:
+      html = renderStepScript();
+      break;
+    case 5:
+      html = renderStepConfirm();
+      break;
+  }
+
+  wrapper.innerHTML = html;
+}
+
+/* ---- STEP 1: COACH DETAILS ---- */
+
+function renderStepDetails() {
+  return `
+    <div class="wizard-step-card">
+      <h2>Coach details</h2>
+      <p>Capture the basic information for this coaching business. You can edit later if needed.</p>
+
+      <div id="step-error"></div>
+
+      <div class="form-group">
+        <label>Coach name</label>
+        <input id="coach_name" placeholder="Example: Alpha Coaching Studio" value="${coachData.coach_name || ""}">
+      </div>
+
+      <div class="form-group">
+        <label>Admin email</label>
+        <input id="coach_email" type="email" placeholder="founder@coachbrand.com" value="${coachData.email || ""}">
+        <small>This will be used for communication and login notifications.</small>
+      </div>
+
+      <div class="form-group">
+        <label>Plan</label>
+        <select id="coach_plan">
+          <option ${coachData.plan === "Starter" ? "selected" : ""}>Starter</option>
+          <option ${coachData.plan === "Pro" ? "selected" : ""}>Pro</option>
+          <option ${coachData.plan === "Premium" ? "selected" : ""}>Premium</option>
+        </select>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="saveStep1()">Continue</button>
+      </div>
+    </div>
+  `;
+}
+
+function showStepError(message) {
+  const box = document.getElementById("step-error");
+  if (!box) return;
+  box.innerHTML = `<div class="form-error">${message}</div>`;
 }
 
 function saveStep1() {
-    const name = v("coach_name"), email = v("coach_email");
-    if (!name || !email) return showToast("Name and email required", "error");
+  const name = v("coach_name");
+  const email = v("coach_email");
+  const plan = v("coach_plan");
 
-    coachData = {
-        coach_name: name,
-        email,
-        plan: v("coach_plan"),
-        coach_id: "C" + Date.now()
-    };
+  if (!name || !email) {
+    showStepError("Coach name and admin email are required.");
+    showToast("Please fill in required fields.", "error");
+    return;
+  }
 
-    loadStep2();
+  coachData.coach_name = name;
+  coachData.email = email;
+  coachData.plan = plan;
+  coachData.coach_id = coachData.coach_id || "C" + Date.now();
+
+  coachWizardStep = 2;
+  renderWizardProgress();
+  renderWizardStep();
 }
 
-function loadStep2() {
-    document.getElementById("wizard").innerHTML = `
-        <div class="wizard-step">
-            <h2>Domain</h2>
-            <div class="form-group">
-                <label>Custom Domain</label>
-                <input id="coach_domain" placeholder="courses.brand.com">
-            </div>
+/* ---- STEP 2: DOMAIN ---- */
 
-            <button class="btn-secondary" onclick="loadStep1()">Back</button>
-            <button class="btn-primary" onclick="saveStep2()">Next</button>
-        </div>
-    `;
+function renderStepDomain() {
+  return `
+    <div class="wizard-step-card">
+      <h2>Domain mapping</h2>
+      <p>Connect the coach's whitelabel domain. This must CNAME to your Cloudflare Worker.</p>
+
+      <div id="step-error"></div>
+
+      <div class="form-group">
+        <label>Custom domain</label>
+        <input id="coach_domain" placeholder="courses.coachbrand.com" value="${coachData.domain || ""}">
+        <small>Example: courses.alphaacademy.com → CNAME → your-worker.pages.dev</small>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goBackToStep(1)">Back</button>
+        <button class="btn-primary" onclick="saveStep2()">Continue</button>
+      </div>
+    </div>
+  `;
 }
 
 function saveStep2() {
-    const d = v("coach_domain");
-    if (!d) return showToast("Domain is required", "error");
-    coachData.domain = d;
-    loadStep3();
+  const domain = v("coach_domain");
+  if (!domain) {
+    showStepError("Custom domain is required.");
+    showToast("Domain is required.", "error");
+    return;
+  }
+  coachData.domain = domain;
+
+  coachWizardStep = 3;
+  renderWizardProgress();
+  renderWizardStep();
 }
 
-function loadStep3() {
-    document.getElementById("wizard").innerHTML = `
-        <div class="wizard-step">
-            <h2>Google Sheet</h2>
-            <div class="form-group">
-                <label>Sheet ID</label>
-                <input id="sheet_id">
-            </div>
+/* ---- STEP 3: SHEET ---- */
 
-            <button class="btn-secondary" onclick="loadStep2()">Back</button>
-            <button class="btn-primary" onclick="saveStep3()">Next</button>
-        </div>
-    `;
+function renderStepSheet() {
+  return `
+    <div class="wizard-step-card">
+      <h2>Google Sheet</h2>
+      <p>Link the coach's master Google Sheet (their copy of your LMS template).</p>
+
+      <div id="step-error"></div>
+
+      <div class="form-group">
+        <label>Sheet ID</label>
+        <input id="sheet_id" placeholder="1AbCdEfGhijk..." value="${coachData.sheet_id || ""}">
+        <small>Paste only the spreadsheet ID (the long ID in the URL).</small>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goBackToStep(2)">Back</button>
+        <button class="btn-primary" onclick="saveStep3()">Continue</button>
+      </div>
+    </div>
+  `;
 }
 
 function saveStep3() {
-    const id = v("sheet_id");
-    if (!id) return showToast("Sheet ID required", "error");
-    coachData.sheet_id = id;
-    loadStep4();
+  const sheetId = v("sheet_id");
+  if (!sheetId) {
+    showStepError("Google Sheet ID is required.");
+    showToast("Sheet ID is required.", "error");
+    return;
+  }
+  coachData.sheet_id = sheetId;
+
+  coachWizardStep = 4;
+  renderWizardProgress();
+  renderWizardStep();
 }
 
-function loadStep4() {
-    document.getElementById("wizard").innerHTML = `
-        <div class="wizard-step">
-            <h2>Apps Script URL</h2>
-            <div class="form-group">
-                <label>Web App /exec URL</label>
-                <input id="script_url">
-            </div>
+/* ---- STEP 4: SCRIPT ---- */
 
-            <button class="btn-secondary" onclick="loadStep3()">Back</button>
-            <button class="btn-primary" onclick="saveStep4()">Next</button>
-        </div>
-    `;
+function renderStepScript() {
+  return `
+    <div class="wizard-step-card">
+      <h2>Apps Script backend</h2>
+      <p>Connect the coach's dedicated Apps Script web app (must end with <code>/exec</code>).</p>
+
+      <div id="step-error"></div>
+
+      <div class="form-group">
+        <label>Web App URL</label>
+        <input id="script_url" placeholder="https://script.google.com/macros/s/XYZ/exec" value="${coachData.admin_script_url || ""}">
+        <small>Deploy as a web app & set access appropriately. Use the <strong>/exec</strong> URL.</small>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goBackToStep(3)">Back</button>
+        <button class="btn-primary" onclick="saveStep4()">Continue</button>
+      </div>
+    </div>
+  `;
 }
 
 function saveStep4() {
-    const url = v("script_url");
-    if (!url.endsWith("/exec"))
-        return showToast("Must end with /exec", "error");
+  const url = v("script_url");
+  if (!url || !url.endsWith("/exec")) {
+    showStepError("Apps Script URL must be valid and end with /exec.");
+    showToast("Invalid Apps Script URL.", "error");
+    return;
+  }
+  coachData.admin_script_url = url;
 
-    coachData.admin_script_url = url;
-    loadStep5();
+  coachWizardStep = 5;
+  renderWizardProgress();
+  renderWizardStep();
 }
 
-function loadStep5() {
-    document.getElementById("wizard").innerHTML = `
-        <div class="wizard-step">
-            <h2>Confirm</h2>
-            <pre>${JSON.stringify(coachData, null, 2)}</pre>
+/* ---- STEP 5: CONFIRM ---- */
 
-            <button class="btn-secondary" onclick="loadStep4()">Back</button>
-            <button class="btn-primary" onclick="submitCoach()">Create Coach</button>
-        </div>
-    `;
+function renderStepConfirm() {
+  const pretty = JSON.stringify(coachData, null, 2);
+
+  return `
+    <div class="wizard-step-card">
+      <h2>Confirm & create</h2>
+      <p>Review the configuration below. If everything looks good, create the coach instance.</p>
+
+      <pre style="background:#0f172a; color:#e5e7eb; padding:10px 12px; border-radius:8px; font-size:12px; overflow:auto;">${pretty}</pre>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goBackToStep(4)">Back</button>
+        <button class="btn-primary" onclick="submitCoach()">
+          <span>Create coach</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function goBackToStep(step) {
+  coachWizardStep = step;
+  renderWizardProgress();
+  renderWizardStep();
 }
 
 async function submitCoach() {
-    let btn = document.querySelector(".btn-primary");
-    btn.innerHTML = "Creating...";
-    btn.disabled = true;
+  const btn = document.querySelector(".btn-primary");
+  if (!btn) return;
 
-    const res = await api("addcoach", coachData);
+  btn.disabled = true;
+  btn.innerHTML = "Creating…";
 
-    if (res.success) {
-        showToast("Coach created!", "success");
-        document.getElementById("wizard").innerHTML = `
-            <div class="wizard-step" style="background:#ecfdf5;border-left:4px solid #10b981;">
-                <h2>Success!</h2>
-                <p>The coach environment is ready.</p>
-            </div>
-        `;
-    } else {
-        showToast(res.error || "Failed to create coach", "error");
-    }
+  const result = await api("addcoach", coachData);
 
+  if (result.success) {
+    showToast("Coach created successfully.", "success");
+
+    const wrapper = document.getElementById("wizard");
+    wrapper.innerHTML = `
+      <div class="success-card">
+        <h2>Coach environment created 🎉</h2>
+        <p>The coach has been added to your registry and domain routing table. You can manage them from the Coaches and Domains pages.</p>
+      </div>
+    `;
+
+    renderWizardProgress();
+  } else {
+    showToast(result.error || "Failed to create coach.", "error");
     btn.disabled = false;
-    btn.innerHTML = "Create Coach";
+    btn.innerHTML = "Create coach";
+  }
 }
 
-/* Helper */
-function v(id){ return document.getElementById(id).value.trim(); }
+/* ==========================================================================
+   PAGE INITIALIZATION
+   ========================================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+  const activePage = document.body.dataset.page || "";
+  loadSidebar(activePage);
+
+  if (activePage === "add-coach") {
+    initAddCoachWizard();
+  }
+});
