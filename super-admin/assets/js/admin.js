@@ -43,29 +43,40 @@ async function api(action, data = {}) {
   }
 }
 
-/* ==========================================================================
-   SIDEBAR LOADER
-   ========================================================================== */
-
 async function loadSidebar(activePage) {
   try {
-    const sidebarHtml = await fetch("../templates/sidebar.html").then((r) =>
-      r.text()
-    );
+    // Correct relative path for ALL pages in /pages/
+    const sidebarHTML = await fetch("../templates/sidebar.html").then(r => r.text());
 
-    const wrapper = document.createElement("div");
-    wrapper.innerHTML = sidebarHtml;
-    document.body.prepend(wrapper);
+    const container = document.createElement("div");
+    container.innerHTML = sidebarHTML;
+    document.body.prepend(container);
 
-    document.querySelectorAll(".nav-link").forEach((link) => {
+    // Highlight the active link
+    document.querySelectorAll(".nav-link").forEach(link => {
       if (link.dataset.page === activePage) {
         link.classList.add("active");
       }
     });
+
   } catch (err) {
-    console.error("Failed to load sidebar:", err);
+    console.error("Sidebar failed to load:", err);
+
+    // Fallback UI (still usable)
+    const fallback = document.createElement("div");
+    fallback.id = "sidebar";
+    fallback.innerHTML = `
+      <div class="logo">SuperAdmin</div>
+      <nav>
+        <div style="padding:10px;color:#64748b;font-size:14px;">
+          (Sidebar failed to load)
+        </div>
+      </nav>
+    `;
+    document.body.prepend(fallback);
   }
 }
+
 
 /* ==========================================================================
    ADD COACH WIZARD
