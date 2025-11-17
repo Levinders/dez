@@ -1,2 +1,2 @@
 // Update this when ready
-const WORKER_URL = "https://your-worker.pages.dev/";
+const WORKER_URL = "https://lmssystem.raphaellevinders.workers.dev/";
