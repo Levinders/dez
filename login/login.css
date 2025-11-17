@@ -1,0 +1,145 @@
+:root {
+  --accent: #0f172a;
+  --accent-hover: #020617;
+  --bg: #020617;
+  --card-bg: #020617;
+  --border: #1f2937;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --radius: 14px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #111827 0, #020617 55%, #000000 100%);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+}
+
+/* Wrapper */
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* Card */
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  background: rgba(15, 23, 42, 0.94);
+  border-radius: var(--radius);
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+  padding: 24px 22px 26px;
+}
+
+.login-card h2 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.login-sub {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Inputs */
+input {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 9px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #020617;
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+input::placeholder {
+  color: #6b7280;
+}
+
+input:focus {
+  border-color: #e5e7eb;
+  box-shadow: 0 0 0 1px rgba(229, 231, 235, 0.3);
+}
+
+/* Button */
+.login-btn {
+  width: 100%;
+  margin-top: 4px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  background: linear-gradient(to right, #f9fafb, #e5e7eb);
+  color: #020617;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.8);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.login-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+  background: #f9fafb;
+}
+
+/* Toasts */
+#toast-box {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 9999;
+}
+
+.toast {
+  background: #059669;
+  color: white;
+  padding: 9px 12px;
+  font-size: 13px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: toast-in 0.24s forwards;
+}
+
+.toast.error {
+  background: #dc2626;
+}
+
+@keyframes toast-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 22px 18px 24px;
+  }
+}
