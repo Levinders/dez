@@ -1,11 +1,146 @@
-<body data-role="student" data-page="dashboard">
-  <div id="sidebar"></div>
-  <div id="page-content">
-    <!-- student dashboard content -->
-  </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard • Student</title>
 
-  <script src="/shared/js/auth.js"></script>
-  <script>
-    enforceAuthForBodyRole();
-  </script>
+  <!-- Shared config + auth -->
+  <script src="/dez/config.js"></script>
+  <script src="/dez/shared/js/auth.js"></script>
+
+  <!-- Student layout -->
+  <link rel="stylesheet" href="../assets/css/student.css" />
+  <link rel="stylesheet" href="../assets/css/student-dashboard.css" />
+  <script src="../assets/js/student.js" defer></script>
+  <script src="../assets/js/student-dashboard.js" defer></script>
+</head>
+
+<body class="student-body" data-role="student" data-page="dashboard">
+  <div id="toast-box"></div>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar collapsed">
+    <div class="sidebar-top">
+      <div class="logo-area">
+        <div class="logo-circle"></div>
+        <span class="logo-text">Student</span>
+      </div>
+
+      <nav class="menu">
+        <a href="./dashboard.html" class="menu-item" data-page="dashboard">
+          <span class="icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 14h7v7H3z" />
+            </svg>
+          </span>
+          <span class="label">Dashboard</span>
+        </a>
+
+        <a href="./courses.html" class="menu-item" data-page="courses">
+          <span class="icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M4 4.5A2.5 2.5 0 0 1 6.5 7H20v12H6.5A2.5 2.5 0 0 0 4 19.5V4.5z" />
+            </svg>
+          </span>
+          <span class="label">My Courses</span>
+        </a>
+
+        <a href="./profile.html" class="menu-item" data-page="profile">
+          <span class="icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M6 20a6 6 0 0 1 12 0" />
+            </svg>
+          </span>
+          <span class="label">Profile</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <button id="logout-btn" class="menu-item logout">
+        <span class="icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <path d="M16 17l5-5-5-5" />
+            <path d="M21 12H9" />
+          </svg>
+        </span>
+        <span class="label">Logout</span>
+      </button>
+
+      <button id="collapse-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main id="content">
+    <header class="topbar">
+      <button id="mobile-toggle">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 12h18M3 6h18M3 18h18" />
+        </svg>
+      </button>
+      <h1 id="page-title">Dashboard</h1>
+    </header>
+
+    <section id="page-content">
+      <div class="dash-hero">
+        <div>
+          <h2 class="dash-hello" id="student-greeting">Welcome back 👋</h2>
+          <p class="dash-sub">Pick up where you left off and keep your momentum going.</p>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="dash-stats">
+        <div class="dash-card">
+          <span class="dash-card-label">Active Courses</span>
+          <h3 id="stat-active">--</h3>
+        </div>
+        <div class="dash-card">
+          <span class="dash-card-label">Lessons Completed</span>
+          <h3 id="stat-lessons">--</h3>
+        </div>
+        <div class="dash-card">
+          <span class="dash-card-label">Time Spent (hrs)</span>
+          <h3 id="stat-time">--</h3>
+        </div>
+      </div>
+
+      <!-- Continue learning -->
+      <div class="dash-panel">
+        <div class="dash-panel-header">
+          <div>
+            <h3>Continue learning</h3>
+            <p class="dash-panel-sub">Jump back into your most recent course.</p>
+          </div>
+        </div>
+
+        <div id="continue-card" class="continue-card">
+          <div class="continue-left">
+            <span class="badge">In progress</span>
+            <h4 id="continue-title">No course in progress</h4>
+            <p id="continue-sub" class="continue-sub">
+              When you start learning, your last course will appear here.
+            </p>
+          </div>
+          <div class="continue-meta">
+            <span id="continue-progress">0% complete</span>
+            <button class="continue-btn" type="button">
+              Resume
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
 </body>
+</html>
