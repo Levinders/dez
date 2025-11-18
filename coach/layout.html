@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coach Portal</title>
+
+  <!-- Shared config + auth -->
+  <script src="/dez/config.js"></script>
+  <script src="/dez/shared/js/auth.js"></script>
+
+  <!-- Coach layout -->
+  <link rel="stylesheet" href="../assets/css/coach.css" />
+  <script src="../assets/js/coach.js" defer></script>
+</head>
+
+<body class="coach-body" data-role="coach">
+  <div id="toast-box"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar collapsed">
+    <div class="sidebar-top">
+      <div class="logo-area">
+        <div class="logo-circle"></div>
+        <span class="logo-text">Coach</span>
+      </div>
+
+      <nav class="menu">
+        <a href="./dashboard.html" class="menu-item" data-page="dashboard">
+          <span class="icon">
+            <!-- lucide: layout-dashboard -->
+            <svg viewBox="0 0 24 24"><path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 14h7v7H3z"></path></svg>
+          </span>
+          <span class="label">Dashboard</span>
+        </a>
+
+        <a href="./students.html" class="menu-item" data-page="students">
+          <span class="icon">
+            <!-- lucide: users -->
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-3-3.87m-7 5.87v-2a4 4 0 0 1 3-3.87m0 0a4 4 0 1 1 4 0m-4 0v0"></path></svg>
+          </span>
+          <span class="label">Students</span>
+        </a>
+
+        <a href="./courses.html" class="menu-item" data-page="courses">
+          <span class="icon">
+            <!-- lucide: book-open -->
+            <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14H6a4 4 0 0 1-4-4zM22 3h-6a4 4 0 0 0-4 4v14h6a4 4 0 0 0 4-4z"></path></svg>
+          </span>
+          <span class="label">Courses</span>
+        </a>
+
+        <a href="./settings.html" class="menu-item" data-page="settings">
+          <span class="icon">
+            <!-- lucide: settings -->
+            <svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5z"></path><path d="M19.4 15a1.65 1.65 0 0 0 1.6-.4l.1-.1a2 2 0 0 0 0-2.9l-1.2-1.2a2 2 0 0 0-2.9 0l-.1.1a1.65 1.65 0 0 0-.4 1.6l.2.7a6.94 6.94 0 0 1 0 3.2z"></path></svg>
+          </span>
+          <span class="label">Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <button id="logout-btn" class="menu-item logout">
+        <span class="icon">
+          <!-- lucid: log-out -->
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>
+        </span>
+        <span class="label">Logout</span>
+      </button>
+
+      <!-- Collapse toggle -->
+      <button id="collapse-btn">
+        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main id="content">
+    <header class="topbar">
+      <button id="mobile-toggle">
+        <!-- lucide: menu -->
+        <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+      </button>
+
+      <h1 id="page-title">Page</h1>
+    </header>
+
+    <section id="page-content">
+
+      <!-- Pages will fill this -->
+      <p style="opacity:0.5">Page content goes here…</p>
+
+    </section>
+  </main>
+
+</body>
+</html>
