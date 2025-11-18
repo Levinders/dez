@@ -1,62 +1,112 @@
+/* -------------------------------------------------------------
+   COACH LIGHT THEME (Notion / Linear / Vercel Inspired)
+   Soft Grey Background, White Surfaces, Teal Accent
+------------------------------------------------------------- */
+
 :root {
-  --bg: #0d1117;
-  --bg-light: #161b22;
-  --border: #30363d;
-  --text: #e6edf3;
-  --muted: #8b949e;
-  --accent: #0ea5e9;
-  --accent-hover: #38bdf8;
-  --radius: 12px;
+  --c-bg: #f5f7fa;
+  --c-surface: #ffffff;
+  --c-surface-soft: #fdfdfd;
+  --c-border: #e5e7eb;
+  --c-border-strong: #d1d5db;
+
+  --c-text: #1f2937;
+  --c-muted: #6b7280;
+
+  --c-accent: #0ea5e9; /* light teal-blue */
+  --c-accent-soft: rgba(14,165,233,0.15);
+
+  --c-radius: 12px;
+  --c-shadow: 0 4px 12px rgba(0,0,0,0.04);
 }
+
+/* BODY */
 
 body.coach-body {
   margin: 0;
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+  min-height: 100vh;
   display: flex;
-  height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* ---------------- SIDEBAR ---------------- */
+#toast-box {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 99;
+}
+
+.toast {
+  background: var(--c-accent);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+  opacity: 0;
+  animation: toast-in 0.25s forwards ease;
+  font-size: 14px;
+  box-shadow: 0 4px 14px rgba(14,165,233,0.4);
+}
+
+.toast.error {
+  background: #ef4444;
+  box-shadow: 0 4px 14px rgba(239,68,68,0.4);
+}
+
+@keyframes toast-in {
+  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(-6px); }
+}
+
+/* SIDEBAR */
+
 .sidebar {
   width: 72px;
-  background: var(--bg-light);
-  border-right: 1px solid var(--border);
+  background: var(--c-surface);
+  border-right: 1px solid var(--c-border);
+  box-shadow: var(--c-shadow);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: width .25s ease;
+  transition: width 0.23s ease;
   position: fixed;
   top: 0;
   bottom: 0;
-  z-index: 20;
+  z-index: 30;
 }
 
 .sidebar.expanded {
   width: 240px;
 }
 
+.sidebar-top {
+  padding-top: 12px;
+}
+
 .logo-area {
-  height: 72px;
+  height: 68px;
   display: flex;
   align-items: center;
   padding: 0 16px;
-  gap: 12px;
+  gap: 10px;
 }
 
 .logo-circle {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--accent);
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--c-accent);
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.2);
 }
 
 .logo-text {
-  font-size: 18px;
   font-weight: 600;
+  font-size: 17px;
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.18s ease;
 }
 
 .sidebar.expanded .logo-text {
@@ -64,89 +114,88 @@ body.coach-body {
 }
 
 /* MENU */
+
 .menu {
-  padding: 12px 0;
+  padding: 8px 6px 12px;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 14px;
-  color: var(--text);
-  text-decoration: none;
-  padding: 10px 16px;
-  margin: 2px 6px;
+  gap: 12px;
+  padding: 10px 14px;
   border-radius: 8px;
+  margin: 2px 4px;
+  color: var(--c-text);
+  text-decoration: none;
+  font-size: 14px;
   cursor: pointer;
-  transition: background .2s ease;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
 }
 
 .menu-item:hover {
-  background: rgba(255,255,255,0.06);
+  background: var(--c-accent-soft);
+  color: var(--c-accent);
 }
 
 .menu-item.active {
-  background: rgba(14,165,233,0.15);
-  color: var(--accent);
+  background: var(--c-accent);
+  color: white !important;
 }
 
-.menu-item .icon {
-  width: 22px;
-  height: 22px;
-  display: flex;
-}
-
-.menu-item .icon svg {
-  width: 100%;
-  height: 100%;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-}
-
-/* Hide labels when collapsed */
 .menu-item .label {
   opacity: 0;
-  white-space: nowrap;
-  transition: opacity .25s ease;
+  transition: opacity 0.17s ease;
 }
 
 .sidebar.expanded .menu-item .label {
   opacity: 1;
 }
 
-/* BOTTOM CONTROLS */
-
-.sidebar-bottom {
-  margin-bottom: 12px;
+.sidebar .icon svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2;
+  stroke: currentColor;
 }
 
-.logout {
+/* BOTTOM SECTION */
+
+.sidebar-bottom {
+  padding: 8px 10px 12px;
+  border-top: 1px solid var(--c-border);
+}
+
+.menu-item.logout {
   color: #ef4444;
 }
 
 #collapse-btn {
+  margin-top: 8px;
   width: 100%;
-  background: transparent;
+  padding: 10px;
+  background: none;
+  border-radius: 8px;
   border: none;
-  padding: 12px;
   cursor: pointer;
-  color: var(--text);
+  color: var(--c-muted);
 }
 
-#collapse-btn svg {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
+#collapse-btn:hover {
+  background: var(--c-accent-soft);
+  color: var(--c-accent);
 }
 
-/* ---------------- MAIN CONTENT ---------------- */
+/* MAIN CONTENT */
+
 #content {
   margin-left: 72px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  transition: margin-left .25s ease;
+  transition: margin-left 0.23s ease;
 }
 
 .sidebar.expanded ~ #content {
@@ -154,11 +203,13 @@ body.coach-body {
 }
 
 .topbar {
-  height: 64px;
+  height: 60px;
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--border);
-  padding: 0 16px;
+  padding: 0 20px;
+  box-shadow: var(--c-shadow);
 }
 
 #mobile-toggle {
@@ -166,38 +217,30 @@ body.coach-body {
   background: none;
   border: none;
   padding: 8px;
-  margin-right: 12px;
+  margin-right: 14px;
 }
 
-#mobile-toggle svg {
-  width: 22px;
-  height: 22px;
-  stroke: var(--text);
-}
-
-/* PAGE CONTENT */
 #page-content {
-  padding: 20px 26px;
-  overflow-y: auto;
+  padding: 22px 24px;
 }
 
-/* ---------------- MOBILE ---------------- */
+/* MOBILE RESPONSIVE */
+
 @media (max-width: 820px) {
   .sidebar {
     transform: translateX(-100%);
-    width: 240px !important;
-    position: fixed;
+    width: 220px !important;
   }
 
   .sidebar.active {
     transform: translateX(0);
   }
 
-  #mobile-toggle {
-    display: block;
-  }
-
   #content {
     margin-left: 0 !important;
+  }
+
+  #mobile-toggle {
+    display: inline-flex;
   }
 }
