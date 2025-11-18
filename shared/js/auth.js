@@ -119,10 +119,11 @@ function enforceAuthForBodyRole() {
 
   if (!roleAttr) {
     // If no data-role, just require any authenticated user
-    return enforceAuth();
+   // TEMPORARILY DISABLED FOR DEVELOPMENT
+    //return enforceAuth();
   }
 
-  return enforceAuth([roleAttr]);
+  //return enforceAuth([roleAttr]);
 }
 
 // Expose to global scope
