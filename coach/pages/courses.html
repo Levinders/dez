@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Courses • Coach</title>
+
+  <!-- Global config + Auth -->
+  <script src="/dez/config.js"></script>
+  <script src="/dez/shared/js/auth.js"></script>
+
+  <!-- Coach theme -->
+  <link rel="stylesheet" href="../assets/css/coach.css" />
+  <link rel="stylesheet" href="../assets/css/courses.css" />
+
+  <script src="../assets/js/coach.js" defer></script>
+  <script src="../assets/js/courses.js" defer></script>
+</head>
+
+<body class="coach-body" data-role="coach" data-page="courses">
+  <div id="toast-box"></div>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-top">
+      <div class="logo-area">
+        <div class="logo-circle"></div>
+        <span class="logo-text">Coach</span>
+      </div>
+
+      <nav class="menu">
+
+        <a class="menu-item" href="./dashboard.html" data-page="dashboard">
+          <span class="icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 14h7v7H3z"/>
+            </svg>
+          </span>
+          <span class="label">Dashboard</span>
+        </a>
+
+        <a class="menu-item active" href="./courses.html" data-page="courses">
+          <span class="icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M4 4.5A2.5 2.5 0 0 1 6.5 7H20v12H6.5A2.5 2.5 0 0 0 4 19.5V4.5z"/>
+            </svg>
+          </span>
+          <span class="label">Courses</span>
+        </a>
+
+        <a class="menu-item" href="./students.html" data-page="students">
+          <span class="icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M6 20a6 6 0 0 1 12 0"/>
+            </svg>
+          </span>
+          <span class="label">Students</span>
+        </a>
+
+        <a class="menu-item" href="./settings.html" data-page="settings">
+          <span class="icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V22a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4 15.4a1.65 1.65 0 0 0-1.51-1H2a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8.6 4"/>
+            </svg>
+          </span>
+          <span class="label">Settings</span>
+        </a>
+
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <button id="logout-btn" class="menu-item logout">
+        <span class="icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <path d="M16 17l5-5-5-5"/>
+            <path d="M21 12H9"/>
+          </svg>
+        </span>
+        <span class="label">Logout</span>
+      </button>
+
+      <button id="collapse-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="content">
+    <header class="topbar">
+      <button id="mobile-toggle">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 12h18M3 6h18M3 18h18"/>
+        </svg>
+      </button>
+      <h1 id="page-title">Courses</h1>
+    </header>
+
+    <section id="page-content">
+
+      <!-- Header Row -->
+      <div class="courses-header">
+        <div class="left">
+          <input
+            id="course-search"
+            class="search-input"
+            placeholder="Search courses..."
+            type="text"
+          />
+        </div>
+
+        <div class="right">
+          <a href="./add-course.html" class="add-course-btn">+ Add Course</a>
+        </div>
+      </div>
+
+      <!-- DESKTOP TABLE -->
+      <table class="courses-table">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Status</th>
+            <th>Students</th>
+            <th>Updated</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="courses-table-body"></tbody>
+      </table>
+
+      <!-- MOBILE CARDS -->
+      <div id="courses-cards" class="courses-cards"></div>
+
+    </section>
+  </main>
+</body>
+</html>
