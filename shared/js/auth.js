@@ -2,6 +2,9 @@
    AUTH & ROUTE GUARD
    Shared by: /superadmin, /coach, /student
    ========================================================================== */
+// TEMPORARILY DISABLED FOR DEVELOPMENT
+const DEV_MODE = true;
+
 
 const ROLE_BASE_PATHS = {
   superadmin: "/superadmin/",
@@ -73,6 +76,8 @@ function redirectToLogin() {
  *   enforceAuth(["superadmin", "coach"]); // allow either
  */
 function enforceAuth(allowedRoles) {
+  if (DEV_MODE) return; // skip all checks
+
   const auth = getAuth();
 
   // 1. Must have token & role
@@ -114,16 +119,16 @@ function enforceAuth(allowedRoles) {
  *   enforceAuthForBodyRole();
  */
 function enforceAuthForBodyRole() {
+  if (DEV_MODE) return; // skip all checks
   const body = document.body;
   const roleAttr = body.dataset.role || null;
 
   if (!roleAttr) {
     // If no data-role, just require any authenticated user
-   // TEMPORARILY DISABLED FOR DEVELOPMENT
-    //return enforceAuth();
+    return enforceAuth();
   }
 
-  //return enforceAuth([roleAttr]);
+  return enforceAuth([roleAttr]);
 }
 
 // Expose to global scope
