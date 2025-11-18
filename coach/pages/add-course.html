@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Add Course • Coach</title>
+
+  <!-- Config + Shared Auth -->
+  <script src="/dez/config.js"></script>
+  <script src="/dez/shared/js/auth.js"></script>
+
+  <!-- Coach Light Theme -->
+  <link rel="stylesheet" href="../assets/css/coach.css" />
+  <link rel="stylesheet" href="../assets/css/add-course.css" />
+
+  <script src="../assets/js/coach.js" defer></script>
+  <script src="../assets/js/add-course.js" defer></script>
+</head>
+
+<body class="coach-body" data-role="coach" data-page="courses">
+  <div id="toast-box"></div>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-top">
+      <div class="logo-area">
+        <div class="logo-circle"></div>
+        <span class="logo-text">Coach</span>
+      </div>
+
+      <nav class="menu">
+        <a class="menu-item" href="./dashboard.html" data-page="dashboard">
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 14h7v7H3z" /></svg></span>
+          <span class="label">Dashboard</span>
+        </a>
+
+        <a class="menu-item active" href="./courses.html" data-page="courses">
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 7H20v12H6.5A2.5 2.5 0 0 0 4 19.5V4.5z"></path></svg></span>
+          <span class="label">Courses</span>
+        </a>
+
+        <a class="menu-item" href="./students.html" data-page="students">
+          <span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20a6 6 0 0 1 12 0"/></svg></span>
+          <span class="label">Students</span>
+        </a>
+
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <button id="logout-btn" class="menu-item logout">
+        <span class="icon"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></span>
+        <span class="label">Logout</span>
+      </button>
+
+      <button id="collapse-btn">
+        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="content">
+    <header class="topbar">
+      <button id="mobile-toggle">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 12h18M3 6h18M3 18h18" />
+        </svg>
+      </button>
+      <h1 id="page-title">Add New Course</h1>
+    </header>
+
+    <section id="page-content">
+
+      <!-- WIZARD PROGRESS -->
+      <div class="wizard-progress">
+        <div class="step active" data-step="1">
+          <span class="circle">1</span><span class="label">Basics</span>
+        </div>
+        <div class="line"></div>
+        <div class="step" data-step="2">
+          <span class="circle">2</span><span class="label">Settings</span>
+        </div>
+        <div class="line"></div>
+        <div class="step" data-step="3">
+          <span class="circle">3</span><span class="label">Finish</span>
+        </div>
+      </div>
+
+      <!-- STEP CONTENT -->
+      <div id="wizard-body">
+        
+        <!-- STEP 1 -->
+        <div class="wizard-step" data-step="1">
+          <h2 class="step-title">Course basics</h2>
+          <p class="step-sub">Give your course a clear name & description.</p>
+
+          <div class="form">
+            <label>Course Title</label>
+            <input id="course-title" type="text" class="input" placeholder="e.g. High Ticket Sales Mastery" />
+
+            <label>Description</label>
+            <textarea id="course-desc" class="input textarea" placeholder="Short description..."></textarea>
+
+            <label>Category (optional)</label>
+            <input id="course-category" type="text" class="input" placeholder="e.g. Sales, Coaching" />
+
+            <label>Difficulty</label>
+            <select id="course-difficulty" class="input">
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+
+            <label>Thumbnail (optional)</label>
+            <input id="course-thumb" type="file" class="input" />
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="wizard-step hidden" data-step="2">
+          <h2 class="step-title">Course settings</h2>
+          <p class="step-sub">Control who can see your course.</p>
+
+          <div class="form">
+            <label>Visibility</label>
+            <select id="course-visibility" class="input">
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+              <option value="hidden">Hidden</option>
+              <option value="coming-soon">Coming Soon</option>
+            </select>
+
+            <label>Status</label>
+            <select id="course-status" class="input">
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="wizard-step hidden" data-step="3">
+          <h2 class="step-title">Review & Create</h2>
+          <p class="step-sub">Make sure everything looks good.</p>
+
+          <div id="review-box" class="review-box">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- NAV BUTTONS -->
+      <div class="wizard-nav">
+        <button id="back-btn" class="wizard-btn secondary">Back</button>
+        <button id="next-btn" class="wizard-btn primary">Next</button>
+      </div>
+
+    </section>
+  </main>
+</body>
+</html>
