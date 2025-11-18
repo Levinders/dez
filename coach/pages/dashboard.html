@@ -5,55 +5,123 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coach Dashboard</title>
 
-  <link rel="stylesheet" href="/shared/css/sidebar.css" />
-  <link rel="stylesheet" href="/coach/assets/css/coach.css" />
+  <!-- Shared -->
+  <script src="/dez/config.js"></script>
+  <script src="/dez/shared/js/auth.js"></script>
 
-  <script src="/config.js"></script>
-  <script src="/shared/js/auth.js"></script>
-  <script src="/shared/js/api.js"></script>
-  <script src="/shared/js/sidebar.js" defer></script> <!-- will create next -->
+  <!-- Layout (Sidebar + Header) -->
+  <link rel="stylesheet" href="../assets/css/coach.css" />
+  <script src="../assets/js/coach.js" defer></script>
+
+  <!-- Page specific -->
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <script src="../assets/js/dashboard.js" defer></script>
 </head>
 
-<body data-role="coach" data-page="dashboard">
-  <div class="app-shell">
-    <!-- Sidebar -->
-    <aside class="app-sidebar">
-      <div class="sidebar-rail app-scroll" id="sidebar-rail">
-        <div class="sidebar-header">
-          <div class="sidebar-logo" id="sidebar-logo">
-            <!-- JS will inject brand initials or logo SVG here -->
-          </div>
+<body class="coach-body" data-role="coach" data-page="dashboard">
+  <!-- Toasts -->
+  <div id="toast-box"></div>
+
+  <!-- Sidebar from layout.html (auto included here) -->
+  <!-- We replicate the same layout shell from layout.html -->
+  <!-- (This allows each page to be standalone in GitHub Pages hosting) -->
+
+  <aside id="sidebar" class="sidebar collapsed">
+    <div class="sidebar-top">
+      <div class="logo-area">
+        <div class="logo-circle"></div>
+        <span class="logo-text">Coach</span>
+      </div>
+
+      <nav class="menu">
+        <a href="./dashboard.html" class="menu-item active" data-page="dashboard">
+          <span class="icon">
+            <svg viewBox="0 0 24 24"><path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 14h7v7H3z"></path></svg>
+          </span>
+          <span class="label">Dashboard</span>
+        </a>
+
+        <a href="./students.html" class="menu-item" data-page="students">
+          <span class="icon">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-3-3.87m-7 5.87v-2a4 4 0 0 1 3-3.87m0 0a4 4 0 1 1 4 0m-4 0v0"></path></svg>
+          </span>
+          <span class="label">Students</span>
+        </a>
+
+        <a href="./courses.html" class="menu-item" data-page="courses">
+          <span class="icon">
+            <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14H6a4 4 0 0 1-4-4zM22 3h-6a4 4 0 0 0-4 4v14h6a4 4 0 0 0 4-4z"></path></svg>
+          </span>
+          <span class="label">Courses</span>
+        </a>
+
+        <a href="./settings.html" class="menu-item" data-page="settings">
+          <span class="icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"></circle><path d="M19.4 15a1.65 1.65 0 0 0 1.6-.4l.1-.1a2 2 0 0 0 0-2.9l-1.2-1.2a2 2 0 0 0-2.9 0l-.1.1a1.65 1.65 0 0 0-.4 1.6l.2.7a6.94 6.94 0 0 1 0 3.2z"></path></svg>
+          </span>
+          <span class="label">Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <button id="logout-btn" class="menu-item logout">
+        <span class="icon">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>
+        </span>
+        <span class="label">Logout</span>
+      </button>
+
+      <button id="collapse-btn">
+        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main id="content">
+    <header class="topbar">
+      <button id="mobile-toggle">
+        <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+      </button>
+      <h1 id="page-title">Dashboard</h1>
+    </header>
+
+    <section id="page-content">
+
+      <!-- METRIC CARDS -->
+      <div class="cards-row">
+        <div class="card">
+          <span class="card-label">Total Students</span>
+          <h2 id="stat-students">--</h2>
         </div>
 
-        <nav class="sidebar-nav" id="sidebar-nav">
-          <!-- JS (sidebar.js) will inject nav items with SVG icons here -->
-        </nav>
+        <div class="card">
+          <span class="card-label">Active Courses</span>
+          <h2 id="stat-courses">--</h2>
+        </div>
 
-        <div class="sidebar-footer" id="sidebar-footer">
-          <!-- JS will inject logout/settings icon buttons here -->
+        <div class="card">
+          <span class="card-label">Monthly Revenue</span>
+          <h2 id="stat-revenue">$0</h2>
+        </div>
+
+        <div class="card">
+          <span class="card-label">New Signups</span>
+          <h2 id="stat-new">--</h2>
         </div>
       </div>
-    </aside>
 
-    <!-- Overlay for mobile -->
-    <div class="app-overlay" id="app-overlay"></div>
+      <!-- RECENT ACTIVITY -->
+      <div class="panel">
+        <h3>Recent Activity</h3>
+        <ul id="activity-list" class="activity-list">
+          <li class="activity-loading">Loading…</li>
+        </ul>
+      </div>
 
-    <!-- Main content -->
-    <main class="app-main">
-      <header class="app-topbar">
-        <button class="mobile-menu-button" id="mobile-menu-button" type="button">
-          <!-- SVG hamburger icon will be injected by JS -->
-        </button>
-        <div></div>
-      </header>
+    </section>
+  </main>
 
-      <!-- Page content goes here -->
-      <h1>Coach Dashboard</h1>
-    </main>
-  </div>
-
-  <script>
-    enforceAuthForBodyRole();
-  </script>
 </body>
 </html>
